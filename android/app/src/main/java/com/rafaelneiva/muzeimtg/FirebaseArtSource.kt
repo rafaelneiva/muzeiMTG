@@ -47,7 +47,7 @@ class FirebaseArtSource : RemoteMuzeiArtSource(SOURCE_NAME) {
                         .attribution(wallpaper.name)
                         .imageUri(wallpaper.downloadUrl.toUri())
                         .token(token)
-                        .viewIntent(Intent(Intent.ACTION_VIEW, "https://magic.wizards.com/en/articles/media/wallpapers".toUri()))
+                        .viewIntent(Intent(Intent.ACTION_VIEW, Constants.wizardsUrl.toUri()))
                         .build()
                 )
             }
@@ -56,10 +56,10 @@ class FirebaseArtSource : RemoteMuzeiArtSource(SOURCE_NAME) {
     override fun onCustomCommand(id: Int) {
         when (id) {
             COMMAND_ID_VIEW_PROFILE -> {
-                val profileUri = "https://magic.wizards.com/en/articles/media/wallpapers".toUri()
-                startActivity(Intent(Intent.ACTION_VIEW, profileUri))
+                startActivity(Intent(Intent.ACTION_VIEW, Constants.wizardsUrl.toUri()))
             }
             COMMAND_ID_VISIT_MTG -> {
+                startActivity(Intent(Intent.ACTION_VIEW, Constants.wizardsUrl.toUri()))
             }
         }
     }

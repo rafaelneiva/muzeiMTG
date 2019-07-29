@@ -16,8 +16,6 @@ class FirebaseWorker(
 ) : Worker(context, workerParams) {
 
     companion object {
-        private const val TAG = "MuzeiFirebase"
-
         internal fun enqueueLoad() {
             val workManager = WorkManager.getInstance()
             workManager.enqueue(
@@ -48,8 +46,8 @@ class FirebaseWorker(
                         byline = wallpaper.name
                         attribution = attributionString
                         persistentUri = wallpaper.downloadUrl.toUri()
-                        webUri = wallpaper.downloadUrl.toUri()
-                        metadata = wallpaper.downloadUrl
+                        webUri = Constants.wizardsUrl.toUri()
+                        metadata = Constants.wizardsUrl
                     }
                 })
             }

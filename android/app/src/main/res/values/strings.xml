@@ -2,4 +2,5 @@
     <string name="app_name">Muzei MTG</string>
     <string name="attribution">Wallpaper by WotC</string>
     <string name="description">Wallpaper by WotC</string>
+    <string name="action_visit_wotc">Visit Wizards website</string>
 </resources>
