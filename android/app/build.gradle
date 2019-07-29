@@ -14,6 +14,10 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def unsplashAuthorityValue = "com.rafaelneiva.muzeimtg"
+        manifestPlaceholders = [unsplashAuthority: unsplashAuthorityValue]
+        buildConfigField "String", "UNSPLASH_AUTHORITY", "\"${unsplashAuthorityValue}\""
     }
     buildTypes {
         release {
