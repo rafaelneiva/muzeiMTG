@@ -1,17 +1,17 @@
 package com.rafaelneiva.muzeimtg
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.core.net.toUri
 import androidx.work.*
 import com.google.android.apps.muzei.api.provider.Artwork
 import com.google.android.apps.muzei.api.provider.ProviderContract
-import com.google.firebase.functions.FirebaseFunctions
-import com.google.firebase.storage.FirebaseStorage
 import com.rafaelneiva.muzeimtg.BuildConfig.UNSPLASH_AUTHORITY
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class FirebaseWorker(
-    private val context: Context,
+    context: Context,
     workerParams: WorkerParameters
 ) : Worker(context, workerParams) {
 
@@ -32,23 +32,27 @@ class FirebaseWorker(
         }
     }
 
+    @SuppressLint("CheckResult")
     override fun doWork(): Result {
 
-        val wallpapers = FirebaseService().getWallpaperList().value
-
-        val providerClient = ProviderContract.getProviderClient(applicationContext, UNSPLASH_AUTHORITY)
-        val attributionString = applicationContext.getString(R.string.attribution)
-        providerClient.setArtwork(wallpapers!!.map { wallpaper ->
-            Artwork().apply {
-                token = wallpaper.name
-                title = wallpaper.name
-                byline = wallpaper.name
-                attribution = attributionString
-                persistentUri = wallpaper.downloadUrl.toUri()
-                webUri = wallpaper.downloadUrl.toUri()
-                metadata = wallpaper.downloadUrl
+        FirebaseService().getWallpaperList()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { wallpapers ->
+                val providerClient = ProviderContract.getProviderClient(applicationContext, UNSPLASH_AUTHORITY)
+                val attributionString = applicationContext.getString(R.string.attribution)
+                providerClient.setArtwork(wallpapers.map { wallpaper ->
+                    Artwork().apply {
+                        token = wallpaper.name
+                        title = wallpaper.name
+                        byline = wallpaper.name
+                        attribution = attributionString
+                        persistentUri = wallpaper.downloadUrl.toUri()
+                        webUri = wallpaper.downloadUrl.toUri()
+                        metadata = wallpaper.downloadUrl
+                    }
+                })
             }
-        })
 
         return Result.success()
     }
