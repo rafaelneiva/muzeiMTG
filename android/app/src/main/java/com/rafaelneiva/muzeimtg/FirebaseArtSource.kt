@@ -57,8 +57,7 @@ class FirebaseArtSource : RemoteMuzeiArtSource(SOURCE_NAME) {
         when (id) {
             COMMAND_ID_VIEW_PROFILE -> {
                 currentArtwork?.apply {
-                    val profileUri = token?.substringAfter(':')?.toUri()
-                        ?: return
+                    val profileUri = "https://magic.wizards.com/en/articles/media/wallpapers".toUri()
                     startActivity(Intent(Intent.ACTION_VIEW, profileUri))
                 }
             }
